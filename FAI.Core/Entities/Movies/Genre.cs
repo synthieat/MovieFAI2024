@@ -10,12 +10,17 @@ namespace FAI.Core.Entities.Movies
 {
     public class Genre
     {
-        public Genre() { }
+        public Genre() 
+        {
+           this.Movies = new HashSet<Movie>();
+        }
 
         //[Key, Column(Order = 0)] /* Column mit Order bei kombinierten Schlüssel-Attributen */
         public virtual int Id { get; set; }
         [MaxLength(60), MinLength(2)]
         [Required]
         public virtual string Name { get; set; } = string.Empty;
+
+        public virtual ICollection<Movie> Movies { get; } //= new HashSet<Movie>();
     }
 }

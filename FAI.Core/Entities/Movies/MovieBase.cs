@@ -22,7 +22,7 @@ namespace FAI.Core.Entities.Movies
                 
         public virtual int GenreId { get; set; }   
 
-        public virtual string MediumTypeCode { get; set; }
+        public virtual string? MediumTypeCode { get; set; }
 
     }
 }

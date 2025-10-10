@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FAI.Core.Entities.Movies
 {
-    public class Genre
+    public class Genre : IEntity
     {
         public Genre() 
         {

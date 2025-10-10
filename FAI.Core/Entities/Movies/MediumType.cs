@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace FAI.Core.Entities.Movies
 {
     // [Table(name: "XY")] Table Attribute, um den SQL-Tabellen Namen zu übersteuern
-    public class MediumType
+    public class MediumType : IEntity
     {
         public MediumType() 
         { 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FAI.Core.Entities.Movies
 {
-    public class Movie : MovieBase
+    public class Movie : MovieBase, IEntity
     {
         public virtual Genre Genre { get; set; }
 

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FAI.Core\FAI.Core.csproj" />
+    <ProjectReference Include="..\FAI.Persistence\FAI.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using FAI.Core.Application.DTOs.Movie;
+﻿using FAI.Core.Application.DTOs.Movies;
 using FAI.Core.Entities.Movies;
 using FAI.Core.Repositories.Movies;
 using System;

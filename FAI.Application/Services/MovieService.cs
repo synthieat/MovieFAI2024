@@ -1,4 +1,5 @@
-﻿using FAI.Core.Application.DTOs.Movies;
+﻿using FAI.Common;
+using FAI.Core.Application.DTOs.Movies;
 using FAI.Core.Application.Services;
 using FAI.Core.Entities.Movies;
 using FAI.Core.Repositories.Movies;
@@ -56,29 +57,33 @@ namespace FAI.Application.Services
             }
 
             return await query.Skip(skip) /* Pagination Skip / Take, Achtung: immer zuerst Skip, dann Take */ 
-                        .Take(take)
-                        .ToListAsync(cancellationToken);
+                              .Take(take)
+                              .ToListAsync(cancellationToken);
         }
 
 
         public async Task<MovieDto> GetMovieDtoById(Guid id, CancellationToken cancellationToken = default)
         {
             var query = this.movieRepository.QueryFrom<Movie>(m => m.Id == id)
-                                            .Include(i => i.Genre)
-                                            .Include(i => i.MediumType)
                                             .Select(s => MovieDto.MapFrom(s));
 
             return await query.SingleOrDefaultAsync(cancellationToken);
         }
       
-        public Task<IEnumerable<Genre>> GetGenres(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Genre>> GetGenres(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await this.genreRepository.QueryFrom<Genre>()
+                                             .AsNoTracking()
+                                             .OrderBy(o => o.Name)
+                                             .ToListAsync(cancellationToken);
         }
 
-        public Task<IEnumerable<MediumType>> GetMediumTypes(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<MediumType>> GetMediumTypes(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await this.mediumTypeRepository.QueryFrom<MediumType>()
+                                                  .AsNoTracking()
+                                                  .OrderBy(o => o.Name)
+                                                  .ToListAsync(cancellationToken);
         }
 
 
@@ -86,21 +91,49 @@ namespace FAI.Application.Services
 
         #region COMMAND methods (Create, Update, Delete)
 
-        public Task<MovieDto> CreateMovie(CancellationToken cancellationToken)
+        public async Task<MovieDto> CreateMovie(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var movie = new Movie
+            {
+                Id = Guid.NewGuid(),
+                Title = "n/a",
+                Price = 0M,
+                ReleaseDate = DateTime.Now.Date,
+                GenreId = 1, // Default Genre
+                MediumTypeCode = "BR" // Default MediumType
+            };
+
+            /* Variante 1: Neues Movie Dummy Object wird in Db gespeichert */
+            await this.movieRepository.AddAsync(movie, saveImmediately: false, cancellationToken);
+
+            await this.movieRepository.SaveAsync(cancellationToken);
+            /* Gespeicherte Dummy in DTO mappen und zurückgeben */
+            return MovieDto.MapFrom(movie)!;
         }
 
-        public Task DeleteMovie(Guid id, CancellationToken cancellationToken)
+        public async Task<MovieDto> UpdateMovie(MovieDto movieDto, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            /* Movie Entität erzeugen */
+            var movie = new Movie();
+
+            /* Werte vom DTO in die Entität mappen */
+            Helpers.MapEntityProperties(movieDto, movie, null);
+
+            /* Entität mit eingefügten Werten speichern. Die Id kann aus movie oder movieDto gelesen werden. */
+            var updatedMovie = await this.movieRepository.UpdateAsync(movie, movieDto.Id, saveImmediately: true, cancellationToken);
+
+            // await this.movieRepository.SaveAsync(cancellationToken); <= wenn saveImmediately: true ist, dann nicht mehr nötig
+
+            /* Aktualisiertes DTO zurück geben */
+            return MovieDto.MapFrom(updatedMovie)!;
+        }
+
+        public async Task DeleteMovie(Guid id, CancellationToken cancellationToken)
+        {
+            await this.movieRepository.RemoveByKeyAsync<Movie>(id, saveImmediately: true, cancellationToken);
         }
 
 
-        public Task<MovieDto> UpdateMovie(MovieDto movieDto, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
 
         #endregion
     }

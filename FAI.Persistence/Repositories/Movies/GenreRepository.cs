@@ -1,4 +1,5 @@
-﻿using FAI.Core.Repositories.Movies;
+﻿using FAI.Core.Attributes;
+using FAI.Core.Repositories.Movies;
 using FAI.Persistence.Repositories.Base;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace FAI.Persistence.Repositories.Movies
 {
+    [MapServiceDependency(nameof(GenreRepository))]
     public class GenreRepository : BaseRepository, IGenreRepository
     {
     }

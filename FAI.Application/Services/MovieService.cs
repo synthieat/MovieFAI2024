@@ -1,6 +1,7 @@
 ﻿using FAI.Common;
 using FAI.Core.Application.DTOs.Movies;
 using FAI.Core.Application.Services;
+using FAI.Core.Attributes;
 using FAI.Core.Entities.Movies;
 using FAI.Core.Repositories.Movies;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace FAI.Application.Services
 {
+    [MapServiceDependency(nameof(MovieService))]
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository movieRepository;
@@ -38,8 +40,8 @@ namespace FAI.Application.Services
         {
             var query = this.movieRepository.QueryFrom<Movie>()
                                             .Include(i => i.Genre)
-                                            .Include(i => i.MediumType)
-                                            .Select(s => MovieDto.MapFrom(s));
+                                            .Include(i => i.MediumType).AsQueryable();
+                                            
 
             if(!string.IsNullOrWhiteSpace(searchText))
             {
@@ -58,6 +60,7 @@ namespace FAI.Application.Services
 
             return await query.Skip(skip) /* Pagination Skip / Take, Achtung: immer zuerst Skip, dann Take */ 
                               .Take(take)
+                              .Select(s => MovieDto.MapFrom(s))
                               .ToListAsync(cancellationToken);
         }
 
@@ -91,7 +94,7 @@ namespace FAI.Application.Services
 
         #region COMMAND methods (Create, Update, Delete)
 
-        public async Task<MovieDto> CreateMovie(CancellationToken cancellationToken)
+        public async Task<MovieDto> CreateMovieDto(CancellationToken cancellationToken)
         {
             var movie = new Movie
             {
@@ -100,7 +103,7 @@ namespace FAI.Application.Services
                 Price = 0M,
                 ReleaseDate = DateTime.Now.Date,
                 GenreId = 1, // Default Genre
-                MediumTypeCode = "BR" // Default MediumType
+                MediumTypeCode = "BD" // Default MediumType
             };
 
             /* Variante 1: Neues Movie Dummy Object wird in Db gespeichert */
@@ -111,7 +114,7 @@ namespace FAI.Application.Services
             return MovieDto.MapFrom(movie)!;
         }
 
-        public async Task<MovieDto> UpdateMovie(MovieDto movieDto, CancellationToken cancellationToken)
+        public async Task<MovieDto> UpdateMovieDto(MovieDto movieDto, CancellationToken cancellationToken)
         {
             /* Movie Entität erzeugen */
             var movie = new Movie();

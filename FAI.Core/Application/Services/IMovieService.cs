@@ -32,9 +32,9 @@ namespace FAI.Core.Application.Services
 
         #region COMMAND methods (Create, Update, Delete)
 
-        Task<MovieDto> CreateMovie(CancellationToken cancellationToken);
+        Task<MovieDto> CreateMovieDto(CancellationToken cancellationToken);
 
-        Task<MovieDto> UpdateMovie(MovieDto movieDto, CancellationToken cancellationToken);
+        Task<MovieDto> UpdateMovieDto(MovieDto movieDto, CancellationToken cancellationToken);
 
         Task DeleteMovie(Guid id, CancellationToken cancellationToken);
 

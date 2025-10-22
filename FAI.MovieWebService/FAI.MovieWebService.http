@@ -1,4 +1,4 @@
-@FAI.MovieWebService_HostAddress = http://localhost:5293
+@FAI.MovieWebService_HostAddress = http://localhost:5020
 
 GET {{FAI.MovieWebService_HostAddress}}/weatherforecast/
 Accept: application/json

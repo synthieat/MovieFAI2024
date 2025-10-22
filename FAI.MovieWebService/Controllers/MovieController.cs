@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace FAI.MovieWebService.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class MovieController : Controller
@@ -35,6 +36,7 @@ namespace FAI.MovieWebService.Controllers
                                                         skip: Skip, cancellationToken);
         }
 
+        // [AllowAnonymous]
         [HttpGet(nameof(MovieDto) + ID_PARAMETER_NAME)]
         public async Task<MovieDto> GetMovieDto([FromRoute] Guid Id, CancellationToken cancellationToken)
         {

@@ -1,5 +1,6 @@
 using FAI.Application.Authentication;
 using FAI.Application.Extensions;
+using FAI.Common.Services;
 using FAI.Core.Repositories.Movies;
 using FAI.Persistence.Extensions;
 using FAI.Persistence.Repositories.DBContext;
@@ -70,15 +71,18 @@ namespace FAI.MovieWebService
 
             builder.Services.AddControllers();
 
-            /* BasicAuthentication Handler registrieren */
-            builder.Services.AddAuthentication(nameof(BasicAuthenticationHandler))
-                            .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(nameof(BasicAuthenticationHandler), null);
-
             /* Beispiel für Registrierung einer Klasse */
             // builder.Services.AddScoped<IMovieRepository, MovieRepository>();
             builder.Services.RegisterRepositories();
-          
+
+            /* User Service zur Service-Collection hinzugefügt. */
+            builder.Services.AddScoped<IUserService, UserService>();
+
             builder.Services.RegisterServices();
+
+            /* BasicAuthentication Handler registrieren */
+            builder.Services.AddAuthentication(nameof(BasicAuthenticationHandler))
+                            .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(nameof(BasicAuthenticationHandler), null);
 
             var app = builder.Build();
 

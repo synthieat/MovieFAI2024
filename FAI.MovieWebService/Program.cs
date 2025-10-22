@@ -1,9 +1,12 @@
+using FAI.Application.Authentication;
+using FAI.Application.Extensions;
 using FAI.Core.Repositories.Movies;
+using FAI.Persistence.Extensions;
 using FAI.Persistence.Repositories.DBContext;
 using FAI.Persistence.Repositories.Movies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using FAI.Persistence.Extensions;
-using FAI.Application.Extensions;
+using Microsoft.OpenApi.Models;
 
 namespace FAI.MovieWebService
 {
@@ -30,6 +33,33 @@ namespace FAI.MovieWebService
                         Email = "horst.schneider@hotmail.com"
                     }
                 });
+
+                g.AddSecurityDefinition("basic", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "basic",
+                    In = ParameterLocation.Header,
+                    Description = "Basic Authentictation header using basic scheme"
+
+                });
+
+                g.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "basic"
+                            }
+                        },
+                        new string []{}
+                    }
+
+                });
+
             });
 
             /* MovieDbContext konfigurieren */
@@ -39,6 +69,10 @@ namespace FAI.MovieWebService
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            /* BasicAuthentication Handler registrieren */
+            builder.Services.AddAuthentication(nameof(BasicAuthenticationHandler))
+                            .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(nameof(BasicAuthenticationHandler), null);
 
             /* Beispiel für Registrierung einer Klasse */
             // builder.Services.AddScoped<IMovieRepository, MovieRepository>();
@@ -61,6 +95,7 @@ namespace FAI.MovieWebService
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

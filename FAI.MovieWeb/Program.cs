@@ -1,4 +1,5 @@
 using FAI.MovieWeb.Data;
+using FAI.Persistence.Repositories.DBContext;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,7 @@ namespace FAI.MovieWeb
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             var connectionStringMovie = builder.Configuration.GetConnectionString("MovieDbContext") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            builder.Services.AddDbContext<MovieDbContext>(options =>
                 options.UseSqlServer(connectionStringMovie));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

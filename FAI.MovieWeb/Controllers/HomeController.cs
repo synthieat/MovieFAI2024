@@ -1,6 +1,7 @@
 using FAI.MovieWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Text;
 
 namespace FAI.MovieWeb.Controllers
 {
@@ -16,6 +17,17 @@ namespace FAI.MovieWeb.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public string HelloWorld(int id)
+        {
+            var sb = new StringBuilder();
+            for(int i = 0; i< id; i++)
+            {
+                sb.AppendLine($"Hello World {i}\r\n");
+            }
+
+            return sb.ToString();
         }
 
         public IActionResult Privacy()

@@ -11,7 +11,7 @@ namespace FAI.MovieWeb
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+             // Add services to the container.
             var connectionStringIdentity = builder.Configuration.GetConnectionString("IdentityDbContext") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionStringIdentity));
@@ -25,6 +25,8 @@ namespace FAI.MovieWeb
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+
 
             var app = builder.Build();
 
@@ -48,7 +50,7 @@ namespace FAI.MovieWeb
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=Movies}/{action=Index}/{id?}")
                 .WithStaticAssets();
             app.MapRazorPages()
                .WithStaticAssets();

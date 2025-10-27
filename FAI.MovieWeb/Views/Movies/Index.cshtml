@@ -1,22 +1,23 @@
-﻿@model IEnumerable<FAI.Core.Entities.Movies.Movie>
+﻿@model IEnumerable<MovieDto>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewBag.Title = "Index of Movie";
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @* <a asp-action="Create">@BasicRes.New</a>*@
+    <a href="/Movies/Create" title="@BasicRes.New">@BasicRes.New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Genre)
+                @BasicRes.Genre
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MediumType)
+                @BasicRes.MediumType
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
@@ -34,10 +35,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Genre.Name)
+                @Html.DisplayFor(modelItem => item.GenreName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MediumType.Code)
+                @Html.DisplayFor(modelItem => item.MediumTypeCode)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
@@ -49,9 +50,10 @@
                 @Html.DisplayFor(modelItem => item.ReleaseDate)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                @*<a asp-action="Edit" asp-route-id="@item.Id">@BasicRes.Edit</a>*@
+                <a href="/Movies/Edit/@item.Id">@BasicRes.Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">@BasicRes.Delete</a>
             </td>
         </tr>
 }

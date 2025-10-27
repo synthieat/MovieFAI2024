@@ -2,6 +2,10 @@ using FAI.MovieWeb.Data;
 using FAI.Persistence.Repositories.DBContext;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using FAI.Application.Extensions;
+using FAI.Persistence.Extensions;
+using System.Globalization;
+using Microsoft.Extensions.Options;
 
 namespace FAI.MovieWeb
 {
@@ -26,6 +30,20 @@ namespace FAI.MovieWeb
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
+            builder.Services.RegisterRepositories();
+            builder.Services.RegisterServices();
+
+
+            /* Defintion der Sprachermittlung aus dem HTTP-Request */
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[] { "en", "de", "fr" };
+
+                options.SetDefaultCulture(supportedCultures[1])
+                       .AddSupportedCultures(supportedCultures)
+                       .AddSupportedUICultures(supportedCultures)
+                       .DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("de");
+            });
 
 
             var app = builder.Build();
@@ -42,6 +60,7 @@ namespace FAI.MovieWeb
                 app.UseHsts();
             }
 
+       
             app.UseHttpsRedirection();
             app.UseRouting();
 
@@ -54,6 +73,10 @@ namespace FAI.MovieWeb
                 .WithStaticAssets();
             app.MapRazorPages()
                .WithStaticAssets();
+
+            /* Sprachermittlung aus dem HTTP-Request aktivieren`*/
+            var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(options.Value);
 
             app.Run();
         }

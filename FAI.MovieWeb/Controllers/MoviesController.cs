@@ -1,29 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FAI.Core.Application.Services;
+using FAI.Core.Entities.Movies;
+using FAI.Persistence.Repositories.DBContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using FAI.Core.Entities.Movies;
-using FAI.Persistence.Repositories.DBContext;
 
 namespace FAI.MovieWeb.Controllers
 {
     public class MoviesController : Controller
     {
         private readonly MovieDbContext _context;
+        private readonly IMovieService movieService;
 
-        public MoviesController(MovieDbContext context)
+        public MoviesController(MovieDbContext context, IMovieService movieService)
         {
             _context = context;
+            this.movieService = movieService;
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] string? searchText,
+                                               int? genreId,
+                                               string? mediumTypeCode,
+                                               int take = 10,
+                                               int skip = 0,
+                                               CancellationToken cancellationToken = default)
         {
-            var movieDbContext = _context.Movies.Include(m => m.Genre).Include(m => m.MediumType);
-            return View(await movieDbContext.ToListAsync());
+            var movieDtos = await this.movieService.GetMovieDtos(searchText: searchText,
+                                                                 genreId: genreId, 
+                                                                 mediumTypeCd: mediumTypeCode,
+                                                                 take: take,
+                                                                 skip: skip, cancellationToken);
+           
+            return View(movieDtos);
         }
 
         // GET: Movies/Details/5

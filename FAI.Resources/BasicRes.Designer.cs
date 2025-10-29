@@ -79,6 +79,15 @@ namespace FAI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The field {0} is required!.
+        /// </summary>
+        public static string Err_IsRequired {
+            get {
+                return ResourceManager.GetString("Err_IsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Genre.
         /// </summary>
         public static string Genre {

@@ -68,6 +68,8 @@ namespace FAI.Application.Services
         public async Task<MovieDto> GetMovieDtoById(Guid id, CancellationToken cancellationToken = default)
         {
             var query = this.movieRepository.QueryFrom<Movie>(m => m.Id == id)
+                                            .Include(i => i.Genre)
+                                            .Include(i => i.MediumType)
                                             .Select(s => MovieDto.MapFrom(s));
 
             return await query.SingleOrDefaultAsync(cancellationToken);

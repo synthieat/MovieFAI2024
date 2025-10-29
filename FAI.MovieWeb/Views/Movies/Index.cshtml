@@ -8,7 +8,16 @@
 
 <p>
     @* <a asp-action="Create">@BasicRes.New</a>*@
-    <a href="/Movies/Create" title="@BasicRes.New">@BasicRes.New</a>
+    @* <a href="/Movies/Create" method="post" title="@BasicRes.New">@BasicRes.New</a> *@
+   
+    <form asp-action="Create">
+        <input class="btn btn-sm btn-dark" type="submit" value="@BasicRes.New" />
+    </form>
+
+    <form method="post" action="\Movies\Create">
+        @Html.AntiForgeryToken()
+        <input class="btn btn-sm btn-dark" type="submit" value="@BasicRes.New" />
+    </form>
 </p>
 <table class="table">
     <thead>

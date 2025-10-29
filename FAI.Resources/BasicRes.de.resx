@@ -123,6 +123,9 @@
   <data name="Edit" xml:space="preserve">
     <value>Bearbeiten</value>
   </data>
+  <data name="Err_IsRequired" xml:space="preserve">
+    <value>Das Feld {0} muss einen Wert enthalten.</value>
+  </data>
   <data name="Genre" xml:space="preserve">
     <value>Genre</value>
   </data>

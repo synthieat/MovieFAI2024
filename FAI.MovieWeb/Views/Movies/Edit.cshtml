@@ -1,10 +1,11 @@
-﻿@model FAI.Core.Entities.Movies.Movie
+﻿@model MovieEditModel
 
 @{
     ViewData["Title"] = "Edit";
+    ViewData["LocaleName"] = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
 }
 
-<h1>Edit</h1>
+<h1>@BasicRes.Edit</h1>
 
 <h4>Movie</h4>
 <hr />
@@ -12,31 +13,31 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="MovieDto.Id" />
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="MovieDto.Title" class="control-label"></label>
+                <input asp-for="MovieDto.Title" class="form-control" />
+                <span asp-validation-for="MovieDto.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+                <label asp-for="MovieDto.Price" class="control-label"></label>
+                <input asp-for="MovieDto.Price" class="form-control" />
+                <span asp-validation-for="MovieDto.Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ReleaseDate" class="control-label"></label>
-                <input asp-for="ReleaseDate" class="form-control" />
-                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+                <label asp-for="MovieDto.ReleaseDate" class="control-label"></label>
+                <input asp-for="MovieDto.ReleaseDate" class="form-control" type="date" />
+                <span asp-validation-for="MovieDto.ReleaseDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GenreId" class="control-label"></label>
-                <select asp-for="GenreId" class="form-control" asp-items="ViewBag.GenreId"></select>
-                <span asp-validation-for="GenreId" class="text-danger"></span>
+                <label asp-for="MovieDto.GenreId" class="control-label"></label>
+                <select asp-for="MovieDto.GenreId" class="form-control" asp-items="Model.Genres"></select>
+                <span asp-validation-for="MovieDto.GenreId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MediumTypeCode" class="control-label"></label>
-                <select asp-for="MediumTypeCode" class="form-control" asp-items="ViewBag.MediumTypeCode"></select>
-                <span asp-validation-for="MediumTypeCode" class="text-danger"></span>
+                <label asp-for="MovieDto.MediumTypeCode" class="control-label"></label>
+                <select asp-for="MovieDto.MediumTypeCode" class="form-control" asp-items="Model.MediumTypes"></select>
+                <span asp-validation-for="MovieDto.MediumTypeCode" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

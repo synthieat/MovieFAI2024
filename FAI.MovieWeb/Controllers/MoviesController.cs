@@ -15,14 +15,20 @@ namespace FAI.MovieWeb.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly MovieDbContext _context;
+       // private readonly MovieDbContext _context;
         private readonly IMovieService movieService;
+
+        //public MoviesController(MovieDbContext context, IMovieService movieService)
+        //{
+        //    _context = context;
+        //    this.movieService = movieService;
+        //}
 
         public MoviesController(MovieDbContext context, IMovieService movieService)
         {
-            _context = context;
             this.movieService = movieService;
         }
+
 
         // GET: Movies
         public async Task<IActionResult> Index([FromQuery] string? searchText,
@@ -42,9 +48,9 @@ namespace FAI.MovieWeb.Controllers
         }
 
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details([FromRoute]Guid id, CancellationToken cancellation)
+        public async Task<IActionResult> Details([FromRoute]Guid id, CancellationToken cancellationToken)
         {
-            var movieDto = await this.movieService.GetMovieDtoById(id, cancellation);
+            var movieDto = await this.movieService.GetMovieDtoById(id, cancellationToken);
 
             if (movieDto == null)
             {
@@ -109,21 +115,21 @@ namespace FAI.MovieWeb.Controllers
         //}
 
         // GET: Movies/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit([FromRoute]Guid id, CancellationToken cancellationToken)
         {
-            if (id == null)
+            var movieDto =  await this.movieService.GetMovieDtoById(id, CancellationToken.None);
+
+            if(movieDto == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
-            {
-                return NotFound();
-            }
-            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Name", movie.GenreId);
-            ViewData["MediumTypeCode"] = new SelectList(_context.MediumTypes, "Code", "Code", movie.MediumTypeCode);
-            return View(movie);
+            var movieModel = new MovieEditModel();
+            movieModel.MovieDto = movieDto;
+
+            await this.InitMovieEditModel(movieModel, cancellationToken);
+
+            return View(movieModel);
         }
 
         // POST: Movies/Edit/5
@@ -164,43 +170,32 @@ namespace FAI.MovieWeb.Controllers
         }
 
         // GET: Movies/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete([FromRoute]Guid id, CancellationToken cancellationToken)
         {
-            if (id == null)
+            var movieDto = await this.movieService.GetMovieDtoById(id, cancellationToken);
+
+            if (movieDto == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies
-                .Include(m => m.Genre)
-                .Include(m => m.MediumType)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
-            {
-                return NotFound();
-            }
+            ViewBag.Title = nameof(MoviesController.Details);
 
-            return View(movie);
+            return View(movieDto);
         }
 
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed([FromRoute]Guid id, CancellationToken cancellationToken)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie != null)
-            {
-                _context.Movies.Remove(movie);
-            }
-
-            await _context.SaveChangesAsync();
+            await this.movieService.DeleteMovie(id, cancellationToken);                          
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(Guid id)
-        {
-            return _context.Movies.Any(e => e.Id == id);
-        }
+        //private bool MovieExists(Guid id)
+        //{
+        //    return _context.Movies.Any(e => e.Id == id);
+        //}
     }
 }

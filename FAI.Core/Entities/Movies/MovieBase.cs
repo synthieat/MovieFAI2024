@@ -24,7 +24,7 @@ namespace FAI.Core.Entities.Movies
         public virtual decimal Price { get; set; }
 
         [Display(Name = nameof(ReleaseDate), ResourceType = typeof(BasicRes))]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
 
         public virtual DateTime ReleaseDate { get; set; }
 

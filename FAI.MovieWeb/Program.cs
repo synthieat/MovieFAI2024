@@ -45,6 +45,15 @@ namespace FAI.MovieWeb
                        .DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("de");
             });
 
+            /* Session Funktion hinzufügen */
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
+            });
+            
 
             var app = builder.Build();
 
@@ -63,6 +72,9 @@ namespace FAI.MovieWeb
        
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            /* Damit Session verwendet werden kann */
+            app.UseSession();
 
             app.UseAuthorization();
 

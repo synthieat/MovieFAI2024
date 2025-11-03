@@ -10,6 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{CB3AEAD1-DC86-4397-B73B-3A3F4DD10F4A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{3BB44B67-BAA0-43DA-B489-EA54D0919077}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\Users\horst\OneDrive\WIFI\Web-Developer\PPT_WebDeveloper_Architekturen.pdf = ..\..\Users\horst\OneDrive\WIFI\Web-Developer\PPT_WebDeveloper_Architekturen.pdf
+		..\..\Users\horst\OneDrive\WIFI\Web-Developer\Schnittstellen\PPT_WebDeveloper_Schnittstellen.pdf = ..\..\Users\horst\OneDrive\WIFI\Web-Developer\Schnittstellen\PPT_WebDeveloper_Schnittstellen.pdf
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{3936FD89-F159-4FC9-832A-4104C4D6EB40}"
 EndProject
